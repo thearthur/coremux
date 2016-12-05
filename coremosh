@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export server=$1
+
+ssh -t -t $server docker run --name mosh-proxy \
+    --net=host \
+    -tid \
+    -v /home/core/.ssh:/root/.ssh \
+    -e SSH_CONNECTION \
+    -e TERM=xterm-256color \
+    thearthur/mosh-proxy:latest sh -lc tmux;
+mosh --server='docker exec -ti mosh-proxy sh -c "sleep 1; mosh-server"' $server 

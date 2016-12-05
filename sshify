@@ -1,0 +1,12 @@
+#!/bin/sh
+
+keyfile=`mktemp -u -p /root/.ssh/`
+authfile=/root/.ssh/authorized_keys
+
+if [ ! -f $keyfile ]
+then 
+    ssh-keygen -q -f $keyfile
+    cat $keyfile.pub >> $authfile
+fi
+
+ssh -v -i $keyfile core@localhost
